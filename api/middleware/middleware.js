@@ -15,9 +15,10 @@ async function validateUserId(req, res, next) {
     if (!user) {
       res
         .status(404)
-        .json({ message: `User with id ${req.params.is} does not exist` });
+        .json({ message: `User with id ${req.params.id} does not exist` });
     } else {
       req.user = user;
+      console.log(req.user);
       next();
     }
   } catch (err) {
@@ -25,12 +26,46 @@ async function validateUserId(req, res, next) {
   }
 }
 
-function validateUser(req, res, next) {
-  // DO YOUR MAGIC
+const userSchema = yup.object({
+  name: yup
+    .string()
+    .trim()
+    .required("name required")
+    .min(3, "name must be 3 chars")
+    .max(40, "name must be under 40 chars"),
+});
+
+async function validateUser(req, res, next) {
+  try {
+    const userValidated = await userSchema.validate(req.body, {
+      stripUnknown: true,
+    });
+    req.body = userValidated;
+    next();
+  } catch (err) {
+    next({ status: 400, message: err.message });
+  }
 }
 
-function validatePost(req, res, next) {
-  // DO YOUR MAGIC
+const textSchema = yup.object({
+  name: yup
+    .string()
+    .trim()
+    .required("text required")
+    .min(3, "text must be 3 chars")
+    .max(40, "text must be under 40 chars"),
+});
+
+async function validatePost(req, res, next) {
+  try {
+    const postValidated = await textSchema.validate(req.body, {
+      stripUnknown: true,
+    });
+    req.body = postValidated;
+    next();
+  } catch (err) {
+    next({ status: 400, message: err.message });
+  }
 }
 
 module.exports = { logger, validateUserId, validateUser, validatePost };
