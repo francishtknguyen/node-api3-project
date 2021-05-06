@@ -5,7 +5,9 @@ const Posts = require("../posts/posts-model");
 function logger(req, res, next) {
   // const date = Date.now();
   console.log(`
-  [${req.method}] request to ${req.baseUrl} endpoint on ${Date.now()}
+  [${req.method}] request to ${
+    req.baseUrl
+  } endpoint on ${new Date().toUTCString()}
   `);
   next();
 }

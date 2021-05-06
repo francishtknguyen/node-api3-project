@@ -54,9 +54,6 @@ router.post(
   validateUserId,
   validatePost,
   (req, res, next) => {
-    // RETURN THE NEWLY CREATED USER POST
-    // this needs a middleware to verify user id
-    // and another middleware to check that the request body is valid
     Posts.insert({ ...req.body, user_id: req.params.id })
       .then((post) => {
         res.status(201).json(post);
@@ -65,8 +62,7 @@ router.post(
   }
 );
 
-function errorHandler(err, req, res, next) {
-  /*eslint-disable-line*/
+function errorHandler(err, req, res, next /*eslint-disable-line*/) {
   res.status(err.status || 500).json({
     note: "You've Got an Error",
     message: err.message,
