@@ -32,7 +32,12 @@ router.post("/", logger, validateUser, (req, res, next) => {
 
 router.put("/:id", logger, validateUserId, validateUser, (req, res, next) => {
   Users.update(req.user.id, req.body)
-    .then(() => res.status(200).json({ ...req.body, id: req.user.id }))
+    .then(() => {
+      return Users.getById(req.user.id);
+    })
+    .then((user) => {
+      res.status(200).json(user);
+    })
     .catch(next);
 });
 
