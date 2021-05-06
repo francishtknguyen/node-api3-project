@@ -1,7 +1,10 @@
+require("dotenv").config();
 const express = require("express");
 const userRouter = require("./users/users-router");
 
 const server = express();
+
+process.env.API_KEY || "Francis";
 
 server.use(express.json());
 
