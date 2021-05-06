@@ -31,29 +31,39 @@ router.post("/", logger, validateUser, (req, res, next) => {
 });
 
 router.put("/:id", logger, validateUserId, validateUser, (req, res, next) => {
-  Users.update(req.params.id, req.body)
-    .then(() => res.status(200).json(req.body))
+  Users.update(req.user.id, req.body)
+    .then(() => res.status(200).json(req.user))
     .catch(next);
 });
 
 router.delete("/:id", logger, validateUserId, (req, res, next) => {
-  // RETURN THE FRESHLY DELETED USER OBJECT
-  // this needs a middleware to verify user id
   Users.remove(req.user.id)
     .then(() => res.status(200).json(req.user))
     .catch(next);
 });
 
-router.get("/:id/posts", (req, res) => {
-  // RETURN THE ARRAY OF USER POSTS
-  // this needs a middleware to verify user id
+router.get("/:id/posts", logger, validateUserId, (req, res, next) => {
+  Users.getUserPosts(req.user.id)
+    .then((post) => res.status(200).json(post))
+    .catch(next);
 });
 
-router.post("/:id/posts", (req, res) => {
-  // RETURN THE NEWLY CREATED USER POST
-  // this needs a middleware to verify user id
-  // and another middleware to check that the request body is valid
-});
+router.post(
+  "/:id/posts",
+  logger,
+  validateUserId,
+  validatePost,
+  (req, res, next) => {
+    // RETURN THE NEWLY CREATED USER POST
+    // this needs a middleware to verify user id
+    // and another middleware to check that the request body is valid
+    Posts.insert({ ...req.body, user_id: req.params.id })
+      .then((post) => {
+        res.status(201).json(post);
+      })
+      .catch(next);
+  }
+);
 
 function errorHandler(err, req, res, next) {
   /*eslint-disable-line*/

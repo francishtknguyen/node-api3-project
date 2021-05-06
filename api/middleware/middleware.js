@@ -3,6 +3,7 @@ const Users = require("../users/users-model");
 const Posts = require("../posts/posts-model");
 
 function logger(req, res, next) {
+  // const date = Date.now();
   console.log(`
   [${req.method}] request to ${req.baseUrl} endpoint on ${Date.now()}
   `);
@@ -18,7 +19,6 @@ async function validateUserId(req, res, next) {
         .json({ message: `User with id ${req.params.id} does not exist` });
     } else {
       req.user = user;
-      console.log(req.user);
       next();
     }
   } catch (err) {
@@ -48,11 +48,11 @@ async function validateUser(req, res, next) {
 }
 
 const textSchema = yup.object({
-  name: yup
+  text: yup
     .string()
     .trim()
     .required("text required")
-    .min(3, "text must be 3 chars")
+    .min(3, "text must be at least 3 chars")
     .max(40, "text must be under 40 chars"),
 });
 
