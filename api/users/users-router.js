@@ -32,7 +32,7 @@ router.post("/", logger, validateUser, (req, res, next) => {
 
 router.put("/:id", logger, validateUserId, validateUser, (req, res, next) => {
   Users.update(req.user.id, req.body)
-    .then(() => res.status(200).json(req.user))
+    .then(() => res.status(200).json({ ...req.body, id: req.user.id }))
     .catch(next);
 });
 

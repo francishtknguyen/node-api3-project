@@ -1,9 +1,7 @@
 const yup = require("yup");
 const Users = require("../users/users-model");
-const Posts = require("../posts/posts-model");
 
 function logger(req, res, next) {
-  // const date = Date.now();
   console.log(`
   [${req.method}] request to ${
     req.baseUrl
@@ -16,9 +14,7 @@ async function validateUserId(req, res, next) {
   try {
     const user = await Users.getById(req.params.id);
     if (!user) {
-      res
-        .status(404)
-        .json({ message: `User with id ${req.params.id} does not exist` });
+      res.status(404).json({ message: `user not found` });
     } else {
       req.user = user;
       next();
@@ -32,7 +28,7 @@ const userSchema = yup.object({
   name: yup
     .string()
     .trim()
-    .required("name required")
+    .required("missing required name field")
     .min(3, "name must be 3 chars")
     .max(40, "name must be under 40 chars"),
 });
@@ -53,7 +49,7 @@ const textSchema = yup.object({
   text: yup
     .string()
     .trim()
-    .required("text required")
+    .required("missing required text field")
     .min(3, "text must be at least 3 chars")
     .max(40, "text must be under 40 chars"),
 });
