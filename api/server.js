@@ -12,12 +12,12 @@ server.use(express.json());
 
 server.use("/api/users", userRouter);
 
-server.use("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "client/build", "index.html"));
-});
-
 server.get("/api/*", (req, res) => {
   res.send(`<h1>Unknown path, please check address</h1>`);
+});
+
+server.use("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client/build", "index.html"));
 });
 
 module.exports = server;
