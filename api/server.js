@@ -7,7 +7,7 @@ const server = express();
 
 process.env.API_KEY || "Francis";
 
-server.use(express.static(path.join(__dirname, "client/build")));
+server.use(express.static(path.join(__dirname, "../client/build")));
 server.use(express.json());
 
 server.use("/api/users", userRouter);
@@ -17,7 +17,7 @@ server.get("/api/*", (req, res) => {
 });
 
 server.use("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "client/build", "index.html"));
+  res.sendFile(path.join(__dirname, "../client/build", "index.html"));
 });
 
 module.exports = server;
